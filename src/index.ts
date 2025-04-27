@@ -1,20 +1,22 @@
-import express from 'express';
-import cors from 'cors';
-import bodyParser from 'body-parser';
+import express from 'express'
+import prisma from './prisma'
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app = express()
+const PORT = process.env.PORT || 3000
 
-// Middlewares
-app.use(cors());
-app.use(bodyParser.json());
-
-// Rota básica
 app.get('/', (req, res) => {
-  res.send('URL Shortener API with TypeScript');
-});
+  res.send('URL Shortener API')
+})
 
-// Iniciar servidor
+app.get('/test-db', async (req, res) => {
+  try {
+    await prisma.$connect()
+    res.json({ message: 'Database connection successful' })
+  } catch (error) {
+    res.status(500).json({ error: 'Database connection failed' })
+  }
+})
+
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+  console.log(`Server running on http://localhost:${PORT}`)
+})
